@@ -16,36 +16,36 @@ function gerarCodigo() {
     return;
   }
 
-  // Aqui você decide se quer forçar zeros à esquerda (ex: área sempre 3 dígitos, casa 4 dígitos)
-  // Descomente a linha que preferir:
-
+  // Escolha o padding desejado (descomente a opção que preferir)
+  
   // Opção 1: sem padding fixo (mais flexível)
   const area = areaLimpa;
   const casa = casaLimpa;
 
-  // Opção 2: padding fixo (exemplo comum em condomínios)
+  // Opção 2: área com 3 dígitos, casa com 4 dígitos (com zeros à esquerda)
   // const area = areaLimpa.padStart(3, "0");
   // const casa = casaLimpa.padStart(4, "0");
 
   const agora = new Date();
 
+  // Formato solicitado: DDMMAAAAHHMM
   const dataHora =
-    agora.getFullYear() +
-    String(agora.getMonth() + 1).padStart(2, "0") +
-    String(agora.getDate()).padStart(2, "0") +
-    String(agora.getHours()).padStart(2, "0") +
-    String(agora.getMinutes()).padStart(2, "0");
+    String(agora.getDate()).padStart(2, "0") +                // dia
+    String(agora.getMonth() + 1).padStart(2, "0") +           // mês
+    String(agora.getFullYear()) +                             // ano com 4 dígitos
+    String(agora.getHours()).padStart(2, "0") +               // hora
+    String(agora.getMinutes()).padStart(2, "0");              // minutos
 
   const codigo = dataHora + area + casa;
 
-  // Mostra o resultado com estilo de sucesso
+  // Mostra o resultado
   document.getElementById("resultado").innerHTML = `
     <div class="codigo-gerado">${codigo}</div>
   `;
 
   mostrarMensagem("Código gerado com sucesso!", "sucesso");
 
-  // Mostra ou atualiza o botão de copiar
+  // Botão de copiar (mantido igual)
   let btnCopiar = document.getElementById("btnCopiar");
   if (!btnCopiar) {
     btnCopiar = document.createElement("button");
@@ -58,32 +58,4 @@ function gerarCodigo() {
     btnCopiar.innerText = "Copiar Código";
     btnCopiar.disabled = false;
   }
-}
-
-function copiarCodigo(codigo, botao) {
-  navigator.clipboard.writeText(codigo)
-    .then(() => {
-      botao.innerText = "Copiado!";
-      botao.style.background = "#2e7d32";
-      setTimeout(() => {
-        botao.innerText = "Copiar Código";
-        botao.style.background = "#2196F3";
-      }, 2000);
-    })
-    .catch(err => {
-      console.error("Erro ao copiar:", err);
-      mostrarMensagem("Não foi possível copiar automaticamente", "erro");
-    });
-}
-
-function mostrarMensagem(texto, tipo) {
-  const msgEl = document.getElementById("mensagem");
-  msgEl.innerText = texto;
-  msgEl.className = "mensagem " + tipo;
-
-  // Remove a mensagem depois de 4 segundos
-  setTimeout(() => {
-    msgEl.innerText = "";
-    msgEl.className = "mensagem";
-  }, 4000);
 }
