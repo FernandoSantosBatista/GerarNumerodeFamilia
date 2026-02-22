@@ -59,3 +59,31 @@ function gerarCodigo() {
     btnCopiar.disabled = false;
   }
 }
+
+function copiarCodigo(codigo, botao) {
+  navigator.clipboard.writeText(codigo)
+    .then(() => {
+      botao.innerText = "Copiado!";
+      botao.style.background = "#2e7d32";
+      setTimeout(() => {
+        botao.innerText = "Copiar Código";
+        botao.style.background = "#2196F3";
+      }, 2000);
+    })
+    .catch(err => {
+      console.error("Erro ao copiar:", err);
+      mostrarMensagem("Não foi possível copiar automaticamente", "erro");
+    });
+}
+
+function mostrarMensagem(texto, tipo) {
+  const msgEl = document.getElementById("mensagem");
+  msgEl.innerText = texto;
+  msgEl.className = "mensagem " + tipo;
+
+  // Remove a mensagem depois de 4 segundos
+  setTimeout(() => {
+    msgEl.innerText = "";
+    msgEl.className = "mensagem";
+  }, 4000);
+}
