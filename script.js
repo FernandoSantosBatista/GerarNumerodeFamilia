@@ -7,6 +7,7 @@ function gerarCodigo() {
     return;
   }
 
+  // Remove qualquer caractere que não seja número
   const areaLimpa = areaInput.replace(/\D/g, '');
   const casaLimpa = casaInput.replace(/\D/g, '');
 
@@ -15,19 +16,29 @@ function gerarCodigo() {
     return;
   }
 
-  const area = areaLimpa;   // ou .padStart(3, "0") se quiser fixo
-  const casa = casaLimpa;   // ou .padStart(4, "0")
+  // Aqui você decide se quer forçar zeros à esquerda (ex: área sempre 3 dígitos, casa 4 dígitos)
+  // Descomente a linha que preferir:
+
+  // Opção 1: sem padding fixo (mais flexível)
+  const area = areaLimpa;
+  const casa = casaLimpa;
+
+  // Opção 2: padding fixo (exemplo comum em condomínios)
+  // const area = areaLimpa.padStart(3, "0");
+  // const casa = casaLimpa.padStart(4, "0");
 
   const agora = new Date();
 
-  // Novo formato: DD MM AA AA (sem separadores)
   const dataHora =
-    String(agora.getDate()).padStart(2, "0") +          // dia
-    String(agora.getMonth() + 1).padStart(2, "0") +     // mês
-    agora.getFullYear();                                // ano completo
+    agora.getFullYear() +
+    String(agora.getMonth() + 1).padStart(2, "0") +
+    String(agora.getDate()).padStart(2, "0") +
+    String(agora.getHours()).padStart(2, "0") +
+    String(agora.getMinutes()).padStart(2, "0");
 
   const codigo = dataHora + area + casa;
 
+  // Mostra o resultado com estilo de sucesso
   document.getElementById("resultado").innerHTML = `
     <div class="codigo-gerado">${codigo}</div>
   `;
