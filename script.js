@@ -1,0 +1,89 @@
+function gerarCodigo() {
+  const areaInput = document.getElementById("area").value.trim();
+  const casaInput = document.getElementById("casa").value.trim();
+
+  if (!areaInput || !casaInput) {
+    mostrarMensagem("Preencha a área e o número da casa", "erro");
+    return;
+  }
+
+  // Remove qualquer caractere que não seja número
+  const areaLimpa = areaInput.replace(/\D/g, '');
+  const casaLimpa = casaInput.replace(/\D/g, '');
+
+  if (!areaLimpa || !casaLimpa) {
+    mostrarMensagem("Digite apenas números para área e casa", "erro");
+    return;
+  }
+
+  // Aqui você decide se quer forçar zeros à esquerda (ex: área sempre 3 dígitos, casa 4 dígitos)
+  // Descomente a linha que preferir:
+
+  // Opção 1: sem padding fixo (mais flexível)
+  const area = areaLimpa;
+  const casa = casaLimpa;
+
+  // Opção 2: padding fixo (exemplo comum em condomínios)
+  // const area = areaLimpa.padStart(3, "0");
+  // const casa = casaLimpa.padStart(4, "0");
+
+  const agora = new Date();
+
+  const dataHora =
+    agora.getFullYear() +
+    String(agora.getMonth() + 1).padStart(2, "0") +
+    String(agora.getDate()).padStart(2, "0") +
+    String(agora.getHours()).padStart(2, "0") +
+    String(agora.getMinutes()).padStart(2, "0");
+
+  const codigo = dataHora + area + casa;
+
+  // Mostra o resultado com estilo de sucesso
+  document.getElementById("resultado").innerHTML = `
+    <div class="codigo-gerado">${codigo}</div>
+  `;
+
+  mostrarMensagem("Código gerado com sucesso!", "sucesso");
+
+  // Mostra ou atualiza o botão de copiar
+  let btnCopiar = document.getElementById("btnCopiar");
+  if (!btnCopiar) {
+    btnCopiar = document.createElement("button");
+    btnCopiar.id = "btnCopiar";
+    btnCopiar.innerText = "Copiar Código";
+    btnCopiar.className = "btn-copiar";
+    btnCopiar.onclick = () => copiarCodigo(codigo, btnCopiar);
+    document.querySelector(".container").appendChild(btnCopiar);
+  } else {
+    btnCopiar.innerText = "Copiar Código";
+    btnCopiar.disabled = false;
+  }
+}
+
+function copiarCodigo(codigo, botao) {
+  navigator.clipboard.writeText(codigo)
+    .then(() => {
+      botao.innerText = "Copiado!";
+      botao.style.background = "#2e7d32";
+      setTimeout(() => {
+        botao.innerText = "Copiar Código";
+        botao.style.background = "#2196F3";
+      }, 2000);
+    })
+    .catch(err => {
+      console.error("Erro ao copiar:", err);
+      mostrarMensagem("Não foi possível copiar automaticamente", "erro");
+    });
+}
+
+function mostrarMensagem(texto, tipo) {
+  const msgEl = document.getElementById("mensagem");
+  msgEl.innerText = texto;
+  msgEl.className = "mensagem " + tipo;
+
+  // Remove a mensagem depois de 4 segundos
+  setTimeout(() => {
+    msgEl.innerText = "";
+    msgEl.className = "mensagem";
+  }, 4000);
+}
