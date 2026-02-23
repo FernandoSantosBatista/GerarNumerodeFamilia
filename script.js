@@ -40,7 +40,9 @@ function gerarCodigo() {
 
   // Mostra o resultado
   document.getElementById("resultado").innerHTML = `
-    <div class="codigo-gerado">${codigo}</div>
+    <div class="codigo-formatado">
+    ${codigo.slice(0,2)}/${codigo.slice(2,4)}/${codigo.slice(4,8)}-${codigo.slice(8,10)}:${codigo.slice(10,12)}-${codigo.slice(12,14)}-${codigo.slice(14)}
+  </div>
   `;
 
   mostrarMensagem("Código gerado com sucesso!", "sucesso");
